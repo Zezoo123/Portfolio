@@ -17,10 +17,26 @@ export default function Contact() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // TODO: send this to FastAPI backend
-    console.log('Form submitted:', formData);
-    setSubmitted(true);
+
+    try {
+      const res = await fetch("http://localhost:8000/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (res.ok) {
+        setSubmitted(true);
+      } else {
+        console.error("Failed to send message");
+      }
+    } catch (err) {
+      console.error("Error sending message:", err);
+    }
   };
+
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center px-6">
